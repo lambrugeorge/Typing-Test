@@ -36,6 +36,9 @@ let totalTyped = '';
 let currentCharIndex = 0;
 let errors = 0;
 
+let timeLeft = 6;
+let timerInterval;
+let typingStarted = false;
 
 
 let longText = generateLongText();
@@ -57,10 +60,32 @@ function generateLongText() {
     return shuffledWords.join(' ');
 }
 
+// Start countdown timer
+function startTimer() {
+    if (!typingStarted) {
+        typingStarted = true;
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            timerElement.textContent = `Time left: ${timeLeft}s`;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                endTest();
+            }
+        }, 1000);
+    }
+}
+
+
+// End the test and display final score
+function endTest() {
+    alert('Test is over!');
+}
+
 
 // Handle typing over the display text and scrolling.
-
 document.addEventListener('keydown', (e) => {
+    startTimer();
+
     if (e.key == "Backspace") {
         if (totalTyped.length > 0) {
             currentCharIndex = Math.max(currentCharIndex -1, 0);
@@ -91,4 +116,11 @@ document.addEventListener('keydown', (e) => {
         span.textContent = textArray[i];
         textContainer.appendChild(span);
     };
-});
+
+
+//Scroll the container only after 20 characters
+    if (totalTyped.length >= 20) {
+        const scrollAmount = (totalTyped.length - 20) * 14;
+        textContainer.scrollLeft = scrollAmount;
+    }
+}); 

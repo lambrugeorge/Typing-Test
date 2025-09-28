@@ -37,6 +37,12 @@ body {
     font-size: 1.5rem;
 }
 
+
+span {
+    min-width: 14px;
+}
+
+
 button {
     padding: 10px;
     width: 150px;
