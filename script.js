@@ -78,7 +78,20 @@ function startTimer() {
 
 // End the test and display final score
 function endTest() {
-    alert('Test is over!');
+    timerElement.textContent = `Time's up!`;
+    finalScoreElement.textContent = `Final WPM: ${calculateWPM()}`;
+    textContainer.style.display = 'none';
+    tryAgainButton.style.display = 'block';
+}
+
+
+// Calculate words-per-minute with error adjustment
+
+function calculateWPM() {
+    const wordsTyped = totalTyped.trim().split(/\s/).length;
+    const baseWPM = Math.round((wordsTyped / 6) * 60);
+    const adjustedWPM = Math.max(baseWPM - errors, 0);
+    return adjustedWPM;
 }
 
 
