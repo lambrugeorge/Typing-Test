@@ -32,17 +32,15 @@ const timerElement = document.getElementById('timer');
 const tryAgainButton = document.getElementById('try-again');
 const finalScoreElement = document.getElementById('final-score')
 
+//Variables
 let totalTyped = '';
 let currentCharIndex = 0;
 let errors = 0;
-
-let timeLeft = 6;
+let timeLeft = 60;
 let timerInterval;
 let typingStarted = false;
-
-
 let longText = generateLongText();
-textContainer.textContent = longText;
+
 
 
 // Shuffle words array
@@ -75,7 +73,6 @@ function startTimer() {
     }
 }
 
-
 // End the test and display final score
 function endTest() {
     timerElement.textContent = `Time's up!`;
@@ -84,16 +81,13 @@ function endTest() {
     tryAgainButton.style.display = 'block';
 }
 
-
 // Calculate words-per-minute with error adjustment
-
 function calculateWPM() {
     const wordsTyped = totalTyped.trim().split(/\s/).length;
-    const baseWPM = Math.round((wordsTyped / 6) * 60);
+    const baseWPM = Math.round((wordsTyped / 60) * 60);
     const adjustedWPM = Math.max(baseWPM - errors, 0);
     return adjustedWPM;
 }
-
 
 // Handle typing over the display text and scrolling.
 document.addEventListener('keydown', (e) => {
@@ -137,3 +131,51 @@ document.addEventListener('keydown', (e) => {
         textContainer.scrollLeft = scrollAmount;
     }
 }); 
+
+
+// Reset the test
+function resetTest() {
+    clearInterval(timerInterval);
+    timeLeft = 60;
+    timerElement.textContent = `Time left: ${timeLeft}s`;
+    finalScoreElement.textContent = '';
+    textContainer.style.display = 'block';
+    tryAgainButton.style.display = 'none';
+    totalTyped = '';
+    typingStarted = false;
+    currentCharIndex = 0;
+    errors = 0;
+    textContainer.scrollLeft = 0;
+    longText = generateLongText();
+    init();
+}
+
+// Initialize the test
+function init() {
+    if (isMobileDevice()) {
+        showMobileMessage();
+    } else {
+        textContainer.innetText = longText;
+        timerElement.textContent = `Time left: ${timeLeft}s`;
+    }
+}
+
+//Try again button lister
+tryAgainButton.addEventListener('click', resetTest);
+
+
+//Detect if the device is mobile
+ function isMobileDevice() {
+    return /Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 800;
+ }
+
+ // Show message for mobile users
+
+ function showMobileMessage() {
+    textContainer.textContent = 'This typing test is designed for desktop user only';
+ }
+
+
+
+init();
+
